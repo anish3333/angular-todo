@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { TodoService } from '../../services/todo.service';
+import { TodoFbService } from '../../services/todo-fb.service';
 
 @Component({
   selector: 'app-todos',
@@ -15,6 +16,7 @@ import { TodoService } from '../../services/todo.service';
         <button (click)="addTodo()" class="btn-primary">Add Todo</button>
       </div>
       <ul>
+
         @for(todo of todoService.todos(); track todo.id){
           <li>
             <input
@@ -33,6 +35,7 @@ import { TodoService } from '../../services/todo.service';
             </button>
           </li>
         }
+
       </ul>
     </div>
   `,
@@ -130,7 +133,8 @@ import { TodoService } from '../../services/todo.service';
   `]
 })
 export class TodosComponent {
-  todoService = inject(TodoService);
+  // todoService = inject(TodoService);
+  todoService = inject(TodoFbService);
   newTodoTitle = signal('');
 
   handleInput(event: Event) {
