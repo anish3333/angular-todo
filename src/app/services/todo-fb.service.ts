@@ -1,7 +1,10 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { addDoc, collection, collectionData, deleteDoc, doc, Firestore, updateDoc } from '@angular/fire/firestore';
 import { TodoItem } from '../models/todo.model';
-
+import {
+  GoogleGenerativeAI, HarmBlockThreshold, HarmCategory 
+} from '@google/generative-ai';
+import { environment } from '../../environments/environment.development';
 @Injectable({
   providedIn: 'root'
 })
@@ -51,5 +54,39 @@ export class TodoFbService {
     // Update local state
     this.todos.update((current) => current.filter((todo) => todo.id !== id));
   }
+
+
+  // GEMINI 2.0 CODE: 
+
+
+  genAI = new GoogleGenerativeAI(environment.GEMINI_API_KEY);
+
+  generationConfig = {
+    safetySettings: [
+      {
+        category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+        threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+      },
+    ],
+    temperature: 0.9,
+    top_p: 1,
+    top_k: 32,
+    maxOutputTokens: 100, // limit output
+  };
+
+  model = this.genAI.getGenerativeModel({
+    model: 'gemini-2.0-flash-exp', // or 'gemini-pro-vision'
+    ...this.generationConfig,
+  });
+
+  async TestGeminiPro() {
+    // Model initialisation missing for brevity
+  
+    const prompt = 'What is the largest number with a name?';
+    const result = await this.model.generateContent(prompt);
+    const response = await result.response;
+    console.log(response.text());
+  }
+
 }
 

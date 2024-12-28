@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { TodoService } from '../../services/todo.service';
 import { TodoFbService } from '../../services/todo-fb.service';
 
+
 @Component({
   selector: 'app-todos',
   template: `
@@ -133,6 +134,7 @@ import { TodoFbService } from '../../services/todo-fb.service';
   `]
 })
 export class TodosComponent {
+
   // todoService = inject(TodoService);
   todoService = inject(TodoFbService);
   newTodoTitle = signal('');
@@ -142,6 +144,7 @@ export class TodosComponent {
   }
 
   addTodo() {
+    this.todoService.TestGeminiPro();
     if (this.newTodoTitle().trim()) {
       this.todoService.addTodo(this.newTodoTitle().trim());
       this.newTodoTitle.update(() => '');
